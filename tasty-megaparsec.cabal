@@ -6,11 +6,13 @@ cabal-version: 1.12
 
 name:           tasty-megaparsec
 version:        0.0.0.1
+synopsis:       Utility functions for testing Megaparsec parsers with Tasty
 description:    Please see the README on GitHub at <https://github.com/keszocze/tasty-megaparsec#readme>
+category:       Testing, Parsing
 homepage:       https://github.com/githukeszoczebuser/tasty-megaparsec#readme
 bug-reports:    https://github.com/githukeszoczebuser/tasty-megaparsec/issues
-author:         Oliver Keszöcze info@oliver.keszeocze.de
-maintainer:     Oliver Keszöcze info@oliver.keszeocze.de
+author:         Oliver Keszöcze <info@oliver.keszeocze.de>
+maintainer:     Oliver Keszöcze <info@oliver.keszeocze.de>
 copyright:      2023 Oliver Keszöcze
 license:        BSD3
 license-file:   LICENSE

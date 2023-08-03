@@ -2,8 +2,8 @@ name:                tasty-megaparsec
 version:             0.0.0.1
 github:              "githukeszoczebuser/tasty-megaparsec"
 license:             BSD3
-author:              "Oliver Keszöcze info@oliver.keszeocze.de"
-maintainer:          "Oliver Keszöcze info@oliver.keszeocze.de"
+author:              "Oliver Keszöcze <info@oliver.keszeocze.de>"
+maintainer:          "Oliver Keszöcze <info@oliver.keszeocze.de>"
 copyright:           "2023 Oliver Keszöcze"
 
 extra-source-files:
@@ -11,8 +11,8 @@ extra-source-files:
 - CHANGELOG.md
 
 # Metadata used when publishing your package
-# synopsis:            Short description of your package
-# category:            Web
+synopsis: Utility functions for testing Megaparsec parsers with Tasty 
+category: Testing, Parsing
 
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
