@@ -1,5 +1,7 @@
 # Tasty Megaparsec
 
+[![Haskell CI](https://github.com/keszocze/tasty-megaparsec/actions/workflows/haskell.yml/badge.svg)](https://github.com/keszocze/tasty-megaparsec/actions/workflows/haskell.yml)
+
 This package is intended for testing [`Megaparsec`](https://hackage.haskell.org/package/megaparsec) parsers with
 with [`Tasty`](https://hackage.haskell.org/package/tasty) via [`Tasty.HUnit`](https://hackage.haskell.org/package/tasty-hunit).
 
