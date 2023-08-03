@@ -1,10 +1,10 @@
 name:                tasty-megaparsec
-version:             0.1.0.0
-github:              "githubuser/tasty-megaparsec"
+version:             0.0.0.1
+github:              "githukeszoczebuser/tasty-megaparsec"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2023 Author name here"
+author:              "Oliver Keszöcze info@oliver.keszeocze.de"
+maintainer:          "Oliver Keszöcze info@oliver.keszeocze.de"
+copyright:           "2023 Oliver Keszöcze"
 
 extra-source-files:
 - README.md
@@ -17,10 +17,15 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/tasty-megaparsec#readme>
+description:         Please see the README on GitHub at <https://github.com/keszocze/tasty-megaparsec#readme>
 
 dependencies:
 - base >= 4.7 && < 5
+- megaparsec
+- parser-combinators
+- tasty
+- tasty-hunit
+- tasty-expected-failure
 
 ghc-options:
 - -Wall
