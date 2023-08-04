@@ -15,16 +15,24 @@ module Test.Tasty.Megaparsec (
     succeedsLeaving',
     failsLeaving,
     failsLeaving',
+    shouldFailWith,
+    shouldFailWithM,
+    shouldFailWith',
+    shouldFailWithM',
     expectSuccess,
     expectSuccess_,
     expectFailure,
     initialState,
     initialPosState,
+
+    -- * Re-exports
+    module Text.Megaparsec.Error.Builder,
 )
 where
 
 import Control.Monad (unless, void)
 
+import qualified Data.List.NonEmpty as NE
 import Test.Tasty.HUnit
 import Text.Megaparsec
 import Text.Megaparsec.Char
@@ -144,9 +152,8 @@ r `parseSatisfies` p = case r of
         unless (p x) . assertFailure $
             "the value did not satisfy the predicate: " ++ show x
 
-
 {- | Create an Assertion by saying that the parser should successfully
-parse a value, that the value should satisfy some predicate and that a 
+parse a value, that the value should satisfy some predicate and that a
 specified rest of the input was not consumed.
 
 Use it with functions like 'runParser'' and 'runParserT''
@@ -175,9 +182,8 @@ parseSatisfiesLeaving (st, r) p s = do
         "the value did not satisfy the predicate: " ++ show res
     checkUnconsumed s (stateInput st)
 
-
 {- | Create an Assertion by saying that the parser should successfully
-parse a value, that the value should satisfy some predicate and that a 
+parse a value, that the value should satisfy some predicate and that a
 specified rest of the input was not consumed.
 
 This is a convenience function wrapping `parseSatisfiesLeaving`.
@@ -430,7 +436,9 @@ failsLeaving' ::
     (Eq s, Show a, Show s) =>
     -- | Parser to run
     Parsec e s a ->
+    -- | The input to run the parser on
     s ->
+    -- | Part of input that should be left unconsumed
     s ->
     Assertion
 failsLeaving' p i r = runParser' p (initialState i) `failsLeaving` r
@@ -511,3 +519,105 @@ checkUnconsumed e a =
             ++ show e
             ++ "\nbut it left this: "
             ++ show a
+
+{- | Create an expectation that parser should fail producing certain
+'ParseError'. Use the 'err' function re-exported from this module to construct a
+'ParseError' to compare with.
+
+Usage:
+
+> parse (char 'x') "" "b" `shouldFailWith` err posI (utok 'b' <> etok 'x')
+-}
+shouldFailWith ::
+    ( HasCallStack
+    , ShowErrorComponent e
+    , Stream s
+    , VisualStream s
+    , TraversableStream s
+    , Show a
+    , Eq e
+    ) =>
+    -- | The result of parsing
+    Either (ParseErrorBundle s e) a ->
+    -- | Expected parse error
+    ParseError s e ->
+    Assertion
+r `shouldFailWith` perr1 = r `shouldFailWithM` [perr1]
+
+
+{- | Create an expectation that parser should fail producing certain
+'ParseError'. Use the 'err' function re-exported from this module to construct a
+'ParseError' to compare with.
+
+This is a convenience function wrapping `shouldFailWith`.
+
+Usage:
+
+> shouldFailWith'  (char 'x') "b" $ err 0 (utok 'b' <> etok 'x')
+-}
+shouldFailWith' ::
+    ( ShowErrorComponent e
+    , VisualStream s
+    , TraversableStream s
+    , Show a
+    ) =>
+    -- | The parser
+    Parsec e s a ->
+    -- | The input to run the parser on
+    s ->
+    -- | Expected parse error
+    ParseError s e ->
+    Assertion
+shouldFailWith' p i e = shouldFailWithM' p i [e]
+
+{- | Similar to 'shouldFailWith'', but allows us to check parsers that can
+report more than one parse error at a time.
+-}
+shouldFailWithM' ::
+    ( ShowErrorComponent e
+    , VisualStream s
+    , TraversableStream s
+    , Show a
+    ) =>
+    -- | The parser to run
+    Parsec e s a ->
+    -- | The input to run the parser on
+    s ->
+    -- | Expected parse errors
+    [ParseError s e] ->
+    Assertion
+shouldFailWithM' p i e = parse p "" i `shouldFailWithM` e
+
+{- | Similar to 'shouldFailWith', but allows us to check parsers that can
+report more than one parse error at a time.
+-}
+shouldFailWithM ::
+    ( HasCallStack
+    , ShowErrorComponent e
+    , Stream s
+    , VisualStream s
+    , TraversableStream s
+    , Show a
+    , Eq e
+    ) =>
+    -- | The result of parsing
+    Either (ParseErrorBundle s e) a ->
+    -- | Expected parse errors, the argument is a normal linked list (as
+    -- opposed to the more correct 'NonEmpty' list) as a syntactical
+    -- convenience for the user, passing empty list here will result in an
+    -- error
+    [ParseError s e] ->
+    Assertion
+r `shouldFailWithM` perrs1' = case r of
+    Left e0 ->
+        let e1 = e0{bundleErrors = perrs1}
+            perrs0 = bundleErrors e0
+            perrs1 = NE.fromList perrs1'
+         in unless (perrs0 == perrs1) . assertFailure $
+                "the parser is expected to fail with:\n"
+                    ++ showBundle e1
+                    ++ "but it failed with:\n"
+                    ++ showBundle e0
+    Right v ->
+        assertFailure $
+            "the parser is expected to fail, but it parsed: " ++ show v

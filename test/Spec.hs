@@ -9,20 +9,19 @@ import Text.Megaparsec.Char
 
 main :: IO ()
 main = do
-  defaultMain $    testGroup
-        "Megaparsec Tasty Wrapper Tests"
-        [ shouldSucceedForTests
-        , failsLeavingTests
-        , succeedsLeavingTests
-        , shouldFailTests
-        , shouldParseTests
-        , parseSatisfiesTests
-        , shouldParseLeavingTests
-        , parseSatisfiesLeavingTests
-        ]
-
-
-
+    defaultMain $
+        testGroup
+            "Megaparsec Tasty Wrapper Tests"
+            [ shouldSucceedForTests
+            , failsLeavingTests
+            , succeedsLeavingTests
+            , shouldFailTests
+            , shouldParseTests
+            , parseSatisfiesTests
+            , shouldParseLeavingTests
+            , parseSatisfiesLeavingTests
+            , shouldFailWithTests
+            ]
 
 {- | Convenience type for the parser used for testing
 
@@ -91,6 +90,14 @@ shouldSucceedForTests =
             parse (many aC) "" `shouldSucceedOn` "x"
         ]
 
+shouldFailWithTests :: TestTree
+shouldFailWithTests =
+    testCase "Tests for shouldFailWith" $ do
+        parse (char 'x' :: Parser Char) "" "b"
+            `shouldFailWith` err 0 (utok 'b' <> etok 'x')
+        shouldFailWith'  (char 'x' :: Parser Char) "b" $ err 0 (utok 'b' <> etok 'x')
+  
+
 parseSatisfiesTests :: TestTree
 parseSatisfiesTests =
     testGroup
@@ -109,8 +116,9 @@ parseSatisfiesLeavingTests =
         , testCase "empty parse and rest" $ parseSatisfiesLeaving (runParser' (many aC) (initialState "!not even here!abc!not here!")) null "!not even here!abc!not here!"
         , testCase "length of parsed alphaNumChars and rest" $ parseSatisfiesLeaving' (many aC) "abc!not here!" ((== 3) . length) "!not here!"
         , testCase "empty parse and rest" $ parseSatisfiesLeaving' (many aC) "!not even here!abc!not here!" null "!not even here!abc!not here!"
-        ]        
-        -- shouldParseLeaving (runParser' p (initialState "xkxa")) "xx" "a"
+        ]
+
+-- shouldParseLeaving (runParser' p (initialState "xkxa")) "xx" "a"
 
 shouldFailTests :: TestTree
 shouldFailTests =
