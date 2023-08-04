@@ -35,13 +35,13 @@ lC, aC :: Parser Char
 
 This definition simply ensures that Haskell uses the correct type
 -}
-lC = letterChar :: Parser Char
+lC = letterChar
 
 {- | Alias for the 'alphaNumChar' parser
 
 This definition simply ensures that Haskell uses the correct type
 -}
-aC = alphaNumChar :: Parser Char
+aC = alphaNumChar
 
 succeedsLeavingTests :: TestTree
 succeedsLeavingTests = testCase "Tests for `succeedsLeaving`" $ do
@@ -94,10 +94,10 @@ parseSatisfiesTests :: TestTree
 parseSatisfiesTests =
     testGroup
         "Tests for `parseSatisfies"
-        [ testCase "length of parsed alphaNumChars" $ do parse (many aC) "" "abc!nothere!" `parseSatisfies` ((== 3) . length)
-        , testCase "empty parse" $ do parse (many aC) "" "!notevenhere!abc!nothere!" `parseSatisfies` null
-        , testCase "length of parsed alphaNumChars" $ do parseSatisfies' (many aC) "abc!nothere!" ((== 3) . length)
-        , testCase "empty parse" $ do parseSatisfies' (many aC) "!notevenhere!abc!nothere!" null
+        [ testCase "length of parsed alphaNumChars" $ parse (many aC) "" "abc!nothere!" `parseSatisfies` ((== 3) . length)
+        , testCase "empty parse" $ parse (many aC) "" "!notevenhere!abc!nothere!" `parseSatisfies` null
+        , testCase "length of parsed alphaNumChars" $ parseSatisfies' (many aC) "abc!nothere!" ((== 3) . length)
+        , testCase "empty parse" $ parseSatisfies' (many aC) "!notevenhere!abc!nothere!" null
         ]
 
 shouldFailTests :: TestTree
