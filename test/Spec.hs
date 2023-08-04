@@ -1,11 +1,34 @@
-import Control.Monad.Combinators
-import Data.Void
-import Test.Tasty
-import Test.Tasty.ExpectedFailure
-import Test.Tasty.HUnit
-import Test.Tasty.Megaparsec
-import Text.Megaparsec
-import Text.Megaparsec.Char
+import Control.Monad.Combinators (many, some)
+import Data.Void (Void)
+import Test.Tasty (TestTree, defaultMain, testGroup)
+import Test.Tasty.ExpectedFailure (expectFail)
+import Test.Tasty.HUnit (testCase)
+import Test.Tasty.Megaparsec (
+    err,
+    etok,
+    failsLeaving,
+    failsLeaving',
+    initialState,
+    parseSatisfies,
+    parseSatisfies',
+    parseSatisfiesLeaving,
+    parseSatisfiesLeaving',
+    shouldFailFor,
+    shouldFailWith,
+    shouldFailWith',
+    shouldFailOn,
+    shouldParse,
+    shouldParse',
+    shouldParseLeaving,
+    shouldParseLeaving',
+    shouldSucceedFor,
+    shouldSucceedOn,
+    succeedsLeaving,
+    succeedsLeaving',
+    utok
+ )
+import Text.Megaparsec (MonadParsec (eof), Parsec, parse, runParser')
+import Text.Megaparsec.Char (alphaNumChar, char, letterChar)
 
 main :: IO ()
 main = do
@@ -69,7 +92,7 @@ shouldParseLeavingTests = testGroup "Tests for shouldParseLeaving" [succeeding, 
                 shouldParseLeaving' (some (char 'x' :: Parser Char)) "xxa" "xx" "b"
                 shouldParseLeaving (runParser' p (initialState "xkxa")) "xx" "b"
             ]
-    p = (some (char 'x' :: Parser Char))
+    p = some (char 'x' :: Parser Char)
 
 shouldSucceedForTests :: TestTree
 shouldSucceedForTests =
@@ -95,8 +118,7 @@ shouldFailWithTests =
     testCase "Tests for shouldFailWith" $ do
         parse (char 'x' :: Parser Char) "" "b"
             `shouldFailWith` err 0 (utok 'b' <> etok 'x')
-        shouldFailWith'  (char 'x' :: Parser Char) "b" $ err 0 (utok 'b' <> etok 'x')
-  
+        shouldFailWith' (char 'x' :: Parser Char) "b" $ err 0 (utok 'b' <> etok 'x')
 
 parseSatisfiesTests :: TestTree
 parseSatisfiesTests =

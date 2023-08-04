@@ -1,24 +1,31 @@
 module Test.Tasty.Megaparsec (
+    -- * Basic testing
     shouldSucceedFor,
     shouldSucceedOn,
     shouldFailFor,
     shouldFailOn,
-    parseSatisfies,
-    parseSatisfies',
     shouldParse,
     shouldParse',
-    shouldParseLeaving,
-    shouldParseLeaving',
-    parseSatisfiesLeaving,
-    parseSatisfiesLeaving',
+    parseSatisfies,
+    parseSatisfies',
+
+    -- * Incremental parsing
     succeedsLeaving,
     succeedsLeaving',
     failsLeaving,
     failsLeaving',
+    shouldParseLeaving,
+    shouldParseLeaving',
+    parseSatisfiesLeaving,
+    parseSatisfiesLeaving',
+
+    -- * Testing of error messages
     shouldFailWith,
     shouldFailWithM,
     shouldFailWith',
     shouldFailWithM',
+
+    -- * Helper functions
     expectSuccess,
     expectSuccess_,
     expectFailure,
@@ -33,9 +40,29 @@ where
 import Control.Monad (unless, void)
 
 import qualified Data.List.NonEmpty as NE
-import Test.Tasty.HUnit
-import Text.Megaparsec
-import Text.Megaparsec.Char
+import Test.Tasty.HUnit (
+    Assertion,
+    HasCallStack,
+    assertFailure,
+    (@=?),
+ )
+import Text.Megaparsec (
+    ParseError,
+    ParseErrorBundle (bundleErrors),
+    Parsec,
+    PosState (..),
+    ShowErrorComponent,
+    State (..),
+    Stream,
+    TraversableStream,
+    VisualStream,
+    defaultTabWidth,
+    errorBundlePretty,
+    initialPos,
+    parse,
+    runParser',
+ )
+
 import Text.Megaparsec.Error.Builder
 
 {- | Create Assertion to check that the parser parses the given input.
@@ -543,7 +570,6 @@ shouldFailWith ::
     ParseError s e ->
     Assertion
 r `shouldFailWith` perr1 = r `shouldFailWithM` [perr1]
-
 
 {- | Create an expectation that parser should fail producing certain
 'ParseError'. Use the 'err' function re-exported from this module to construct a
