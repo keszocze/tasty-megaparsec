@@ -9,6 +9,8 @@ module Test.Tasty.Megaparsec (
     shouldParse',
     shouldParseLeaving,
     shouldParseLeaving',
+    parseSatisfiesLeaving,
+    parseSatisfiesLeaving',
     succeedsLeaving,
     succeedsLeaving',
     failsLeaving,
@@ -117,6 +119,8 @@ r `shouldParse` v = case r of
 {- | Create an Assertion by saying that the parser should successfully
 parse a value and that the value should satisfy some predicate.
 
+Usage:
+
 > parse (many alphaNumChar) "" "abc" `parseSatisfies` ((== 3) . length)
 -}
 parseSatisfies ::
@@ -139,6 +143,64 @@ r `parseSatisfies` p = case r of
     Right x ->
         unless (p x) . assertFailure $
             "the value did not satisfy the predicate: " ++ show x
+
+
+{- | Create an Assertion by saying that the parser should successfully
+parse a value, that the value should satisfy some predicate and that a 
+specified rest of the input was not consumed.
+
+Use it with functions like 'runParser'' and 'runParserT''
+that support incremental parsing.
+
+Usage:
+
+> parseSatisfiesLeaving (runParser' (many alphaNumChar) (initialState "abc!nothere!")) ((== 3) . length) "!nothere!"
+-}
+parseSatisfiesLeaving ::
+    ( VisualStream s
+    , TraversableStream s
+    , ShowErrorComponent e
+    , Show a
+    , Show s
+    , Eq s
+    , HasCallStack
+    ) =>
+    (State s e, Either (ParseErrorBundle s e) a) ->
+    (a -> Bool) ->
+    s ->
+    Assertion
+parseSatisfiesLeaving (st, r) p s = do
+    res <- expectSuccess r
+    unless (p res) . assertFailure $
+        "the value did not satisfy the predicate: " ++ show res
+    checkUnconsumed s (stateInput st)
+
+
+{- | Create an Assertion by saying that the parser should successfully
+parse a value, that the value should satisfy some predicate and that a 
+specified rest of the input was not consumed.
+
+This is a convenience function wrapping `parseSatisfiesLeaving`.
+
+Usage:
+
+> parseSatisfiesLeaving' (many alphaNumChar) "abc!not here!" ((== 3) . length) "!not here!"
+-}
+parseSatisfiesLeaving' ::
+    ( VisualStream s
+    , TraversableStream s
+    , ShowErrorComponent e
+    , Show a
+    , Show s
+    , Eq s
+    , HasCallStack
+    ) =>
+    Parsec e s a ->
+    s ->
+    (a -> Bool) ->
+    s ->
+    Assertion
+parseSatisfiesLeaving' p i = parseSatisfiesLeaving (runParser' p (initialState i))
 
 {- | Create an Assertion by saying that the parser should successfully
 parse a value and that the value should satisfy some predicate.

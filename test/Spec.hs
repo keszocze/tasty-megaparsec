@@ -18,6 +18,7 @@ main = do
         , shouldParseTests
         , parseSatisfiesTests
         , shouldParseLeavingTests
+        , parseSatisfiesLeavingTests
         ]
 
 
@@ -94,11 +95,22 @@ parseSatisfiesTests :: TestTree
 parseSatisfiesTests =
     testGroup
         "Tests for `parseSatisfies"
-        [ testCase "length of parsed alphaNumChars" $ parse (many aC) "" "abc!nothere!" `parseSatisfies` ((== 3) . length)
-        , testCase "empty parse" $ parse (many aC) "" "!notevenhere!abc!nothere!" `parseSatisfies` null
-        , testCase "length of parsed alphaNumChars" $ parseSatisfies' (many aC) "abc!nothere!" ((== 3) . length)
-        , testCase "empty parse" $ parseSatisfies' (many aC) "!notevenhere!abc!nothere!" null
+        [ testCase "length of parsed alphaNumChars" $ parse (many aC) "" "abc!not here!" `parseSatisfies` ((== 3) . length)
+        , testCase "empty parse" $ parse (many aC) "" "!not even here!abc!not here!" `parseSatisfies` null
+        , testCase "length of parsed alphaNumChars" $ parseSatisfies' (many aC) "abc!not here!" ((== 3) . length)
+        , testCase "empty parse" $ parseSatisfies' (many aC) "!not even here!abc!not here!" null
         ]
+
+parseSatisfiesLeavingTests :: TestTree
+parseSatisfiesLeavingTests =
+    testGroup
+        "Tests for `parseSatisfiesLeaving"
+        [ testCase "length of parsed alphaNumChars and rest" $ parseSatisfiesLeaving (runParser' (many aC) (initialState "abc!not here!")) ((== 3) . length) "!not here!"
+        , testCase "empty parse and rest" $ parseSatisfiesLeaving (runParser' (many aC) (initialState "!not even here!abc!not here!")) null "!not even here!abc!not here!"
+        , testCase "length of parsed alphaNumChars and rest" $ parseSatisfiesLeaving' (many aC) "abc!not here!" ((== 3) . length) "!not here!"
+        , testCase "empty parse and rest" $ parseSatisfiesLeaving' (many aC) "!not even here!abc!not here!" null "!not even here!abc!not here!"
+        ]        
+        -- shouldParseLeaving (runParser' p (initialState "xkxa")) "xx" "a"
 
 shouldFailTests :: TestTree
 shouldFailTests =
