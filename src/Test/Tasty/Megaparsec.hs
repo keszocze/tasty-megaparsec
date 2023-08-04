@@ -9,12 +9,15 @@ module Test.Tasty.Megaparsec (
     shouldParse',
     shouldParseLeaving,
     shouldParseLeaving',
-    initialState,
-    initialPosState,
     succeedsLeaving,
     succeedsLeaving',
     failsLeaving,
     failsLeaving',
+    expectSuccess,
+    expectSuccess_,
+    expectFailure,
+    initialState,
+    initialPosState,
 )
 where
 
@@ -93,7 +96,7 @@ a parsing result (instead of a 'Parsec') as its first input.
 
 Usage:
 
-> parse (char 'c') "" "c" `shouldParse` 'c'
+> parse (char 'c') "" "c" `shouldParse'` 'c'
 -}
 shouldParse ::
     (Show a, VisualStream s, TraversableStream s, ShowErrorComponent e, Eq a, HasCallStack) =>
