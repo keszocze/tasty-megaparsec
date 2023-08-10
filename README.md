@@ -58,4 +58,10 @@ If you know how to fix this, please let me know.
 
 ## License
 
-Licencing issues are still pending. At some point in the future, this will be filled with actual info. 
+This package is based on work by Mark Karpov. I am hopefully adhering to the BSD 3 clause by naming him here and in
+the [LICENSE file](https://github.com/keszocze/tasty-megaparsec#license).
+
+Copyright © 2016–present Mark Karpov
+Copyright © 2023–present Oliver Keszöcze
+
+Distributed under BSD 3 clause license.
