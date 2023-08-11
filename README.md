@@ -45,6 +45,7 @@ This package is based on work by Mark Karpov. I am hopefully adhering to the BSD
 the [LICENSE file](https://github.com/keszocze/tasty-megaparsec/blob/master/LICENSE).
 
 Copyright © 2016–present Mark Karpov
+
 Copyright © 2023–present Oliver Keszöcze
 
 Distributed under BSD 3 clause license.
