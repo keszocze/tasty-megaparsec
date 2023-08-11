@@ -1,6 +1,7 @@
 # Tasty Megaparsec
 
-[![License](https://img.shields.io/github/license/keszocze/tasty-megaparsec)](https://github.com/keszocze/tasty-megaparsec/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/License-BDS3?color=green)](https://github.com/keszocze/tasty-megaparsec/blob/master/LICENSE)
+
 
 [![Haskell CI](https://github.com/keszocze/tasty-megaparsec/actions/workflows/haskell.yml/badge.svg)](https://github.com/keszocze/tasty-megaparsec/actions/workflows/haskell.yml)
 
