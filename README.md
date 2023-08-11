@@ -1,5 +1,7 @@
 # Tasty Megaparsec
 
+[![License](https://img.shields.io/github/license/keszocze/tasty-megaparsec)](https://github.com/keszocze/tasty-megaparsec/blob/master/LICENSE)
+
 [![Haskell CI](https://github.com/keszocze/tasty-megaparsec/actions/workflows/haskell.yml/badge.svg)](https://github.com/keszocze/tasty-megaparsec/actions/workflows/haskell.yml)
 
 This package is intended for testing [`Megaparsec`](https://hackage.haskell.org/package/megaparsec) parsers with
@@ -40,7 +42,7 @@ this project](https://github.com/keszocze/tasty-megaparsec/blob/master/test/Spec
 ## License
 
 This package is based on work by Mark Karpov. I am hopefully adhering to the BSD 3 clause by naming him here and in
-the [LICENSE file](https://github.com/keszocze/tasty-megaparsec#license).
+the [LICENSE file](https://github.com/keszocze/tasty-megaparsec/blob/master/LICENSE).
 
 Copyright © 2016–present Mark Karpov
 Copyright © 2023–present Oliver Keszöcze
