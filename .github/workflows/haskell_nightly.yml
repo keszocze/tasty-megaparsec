@@ -20,7 +20,4 @@ jobs:
         with:
           pedantic: false
           stack-arguments: --haddock
-          # should select the resolver nightly without the need for
-          # the file to be actually there (at least that is what the)
-          # documentation suggests.
           stack-yaml: "stack-nightly.yaml"
