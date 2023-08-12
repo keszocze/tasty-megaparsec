@@ -19,5 +19,5 @@ jobs:
         uses: freckle/stack-action@v4
         with:
           pedantic: false
-          stack-arguments: --haddock
-          stack-yaml: "stack-nightly.yaml"
+          stack-arguments: --resolver nightly --haddock
+          cache-prefix: nightly/
