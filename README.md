@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-BDS3-brightgreen)](https://github.com/keszocze/tasty-megaparsec/blob/master/LICENSE)
 [![Haskell CI](https://github.com/keszocze/tasty-megaparsec/actions/workflows/haskell.yml/badge.svg)](https://github.com/keszocze/tasty-megaparsec/actions/workflows/haskell.yml)
+[![Haskell CI (nightly)](https://github.com/keszocze/tasty-megaparsec/actions/workflows/haskell_nightly.yml/badge.svg)](https://github.com/keszocze/tasty-megaparsec/actions/workflows/haskell_nightly.yml)
 
 
 This package is intended for testing [`Megaparsec`](https://hackage.haskell.org/package/megaparsec) parsers with
