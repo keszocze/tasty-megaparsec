@@ -12,7 +12,6 @@ permissions:
 jobs:
 
   build:
-    if: false
     name: Stackage ${{ matrix.resolver }} on ${{ matrix.os }}
     strategy:
       fail-fast: false
