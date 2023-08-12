@@ -11,17 +11,16 @@ permissions:
 
 jobs:
   build:
-    name: Stackage ${{ matrix.resolver }} on ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        resolver: [nightly]
-    runs-on: ${{ matrix.os }}
+    name: Stackage nightly on ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - id: stack
         uses: freckle/stack-action@v4
         with:
           pedantic: false
-          stack-arguments: --resolver ${{ matrix.resolver }} --test --haddock
+          stack-arguments: --haddock
+          # should select the resolver nightly without the need for
+          # the file to be actually there (at least that is what the)
+          # documentation suggests.
+          stack-yaml: "stack-nightly.yaml"
