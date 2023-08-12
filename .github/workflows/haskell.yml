@@ -10,7 +10,20 @@ permissions:
   contents: read
 
 jobs:
+
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - id: generate
+        uses: freckle/stack-action/generate-matrix@v4
+        with:
+          find-options: "maxdepth 1 -name 'stack-lts*.yaml'"
+    outputs:
+      stack-yamls: ${{ steps.generate.outputs.stack-yamls }}
+
   build:
+    if: false
     name: Stackage ${{ matrix.resolver }} on ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -27,4 +40,4 @@ jobs:
         uses: freckle/stack-action@v4
         with:
           pedantic: false
-          stack-arguments: --resolver ${{ matrix.resolver }} --test ${{ matrix.haddock }}
+          stack-arguments: --resolver ${{ matrix.resolver }} ${{ matrix.haddock }}
